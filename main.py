@@ -29,9 +29,10 @@ def return_geo_info(soup):
         return 'No Location'
 
 def return_website_soup(url):
+    # Headers are not needed but will greatly increase chances of success and not getting blocked. 
     headers = {
     'User-Agent': 'My User Agent 1.0',
-    'From': 'youremail@domain.com'  
+    'From': 'anotherEmailAddress@gmail.com'  
     }
     resp = requests.get(url, headers=headers)
     soup = BeautifulSoup(resp.text, 'html.parser')
@@ -42,15 +43,18 @@ def return_title(soup):
     a = soup.find('title')
     return str.replace(a.text,  ' - Wikipedia','')
 
+def run_single_page_example():
+    # This example gets us the sites title and date of event. 
+    soup = return_website_soup("https://en.wikipedia.org/wiki/Battle_of_Midway")
+    print(return_title(soup))
+    print(return_historic_date(soup))
+
 if __name__ == "__main__":
 
-    # This example gets us the sites title and date of event. 
-    #soup = return_website_soup("https://en.wikipedia.org/wiki/Battle_of_Midway")
-    #print(return_title(soup))
-    #print(return_historic_date(soup))
+
     start_url = "https://en.wikipedia.org/wiki/Category:Naval_battles_of_World_War_II_involving_the_United_States"
     soup = return_website_soup(start_url)
-    
+
     for ul in soup.find_all('div', {'id':'mw-pages'}): #find every category
         for li in ul.find_all('li'):
             a = li.find('a')
